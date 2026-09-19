@@ -1,0 +1,1 @@
+- [FreshRoute architecture](freshroute-architecture.md) — Keep the prototype on the shared Express/PostgreSQL stack and label deterministic AI/map data explicitly.

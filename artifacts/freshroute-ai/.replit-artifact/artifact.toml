@@ -1,0 +1,28 @@
+kind = "web"
+previewPath = "/"
+title = "FreshRoute AI"
+description = "A hackathon-ready accessibility intelligence dashboard that visualizes confidence-aware observations, change detection, and dynamic accessible routing for inclusive urban mobility."
+version = "1.0.0"
+id = "artifacts/freshroute-ai"
+router = "path"
+
+[[services]]
+name = "web"
+paths = [ "/" ]
+localPort = 19830
+
+[services.development]
+run = "pnpm --filter @workspace/freshroute-ai run dev"
+
+[services.production]
+build = [ "pnpm", "--filter", "@workspace/freshroute-ai", "run", "build" ]
+serve = "static"
+publicDir = "artifacts/freshroute-ai/dist/public"
+
+[[services.production.rewrites]]
+from = "/*"
+to = "/index.html"
+
+[services.env]
+PORT = "19830"
+BASE_PATH = "/"

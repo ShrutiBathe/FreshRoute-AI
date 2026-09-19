@@ -3,13 +3,25 @@ info:
   # Do not change the title, if the title changes, the import paths will be broken
   title: Api
   version: 0.1.0
-  description: API specification
+  description: FreshRoute AI accessibility intelligence prototype API
 servers:
   - url: /api
     description: Base API path
 tags:
   - name: health
     description: Health operations
+  - name: observations
+    description: Accessibility observations and map data
+  - name: reports
+    description: Crowdsourced accessibility reports
+  - name: dashboard
+    description: Dashboard and analytics summaries
+  - name: routing
+    description: Confidence-aware accessibility routing
+  - name: demo
+    description: Hackathon demo scenario
+  - name: vision
+    description: Prototype computer vision inference
 paths:
   /healthz:
     get:
@@ -24,13 +36,409 @@ paths:
             application/json:
               schema:
                 $ref: "#/components/schemas/HealthStatus"
+  /observations:
+    get:
+      operationId: listObservations
+      tags: [observations]
+      summary: List accessibility observations
+      responses:
+        "200":
+          description: Accessibility observations
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/Observation"
+    post:
+      operationId: createObservation
+      tags: [observations]
+      summary: Create an accessibility observation
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/ObservationInput"
+      responses:
+        "201":
+          description: Observation created
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Observation"
+  /observations/{id}:
+    get:
+      operationId: getObservation
+      tags: [observations]
+      summary: Get an observation
+      parameters:
+        - $ref: "#/components/parameters/ObservationId"
+      responses:
+        "200":
+          description: Observation
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Observation"
+        "404":
+          $ref: "#/components/responses/NotFound"
+  /map:
+    get:
+      operationId: getMapData
+      tags: [observations]
+      summary: Get map observations and path segments
+      responses:
+        "200":
+          description: Map data
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/MapData"
+  /reports:
+    get:
+      operationId: listReports
+      tags: [reports]
+      summary: List crowdsourced reports
+      responses:
+        "200":
+          description: Reports
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/Report"
+    post:
+      operationId: createReport
+      tags: [reports]
+      summary: Submit a crowdsourced report
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/ReportInput"
+      responses:
+        "201":
+          description: Report created
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Report"
+  /dashboard/stats:
+    get:
+      operationId: getDashboardStats
+      tags: [dashboard]
+      summary: Get dashboard summary metrics
+      responses:
+        "200":
+          description: Dashboard summary
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/DashboardStats"
+  /analytics:
+    get:
+      operationId: getAnalytics
+      tags: [dashboard]
+      summary: Get analytics series and category breakdowns
+      responses:
+        "200":
+          description: Analytics data
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Analytics"
+  /route:
+    post:
+      operationId: calculateRoutes
+      tags: [routing]
+      summary: Calculate confidence-aware route alternatives
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/RouteRequest"
+      responses:
+        "200":
+          description: Route alternatives
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/RouteResult"
+  /demo/run:
+    post:
+      operationId: runDemoScenario
+      tags: [demo]
+      summary: Run the Detect Verify Decay Update Reroute scenario
+      responses:
+        "200":
+          description: Updated demo state and rerouted alternatives
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/DemoResult"
+  /vision/analyze:
+    post:
+      operationId: analyzeVision
+      tags: [vision]
+      summary: Run deterministic prototype AI inference
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/VisionInput"
+      responses:
+        "200":
+          description: Prototype detections
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/VisionResult"
 components:
+  parameters:
+    ObservationId:
+      name: id
+      in: path
+      required: true
+      schema:
+        type: integer
+  responses:
+    NotFound:
+      description: Resource not found
+      content:
+        application/json:
+          schema:
+            $ref: "#/components/schemas/ErrorResponse"
   schemas:
     HealthStatus:
       type: object
       properties:
         status:
           type: string
+      required: [status]
+    ErrorResponse:
+      type: object
+      properties:
+        error:
+          type: string
+      required: [error]
+    Observation:
+      type: object
+      properties:
+        id: { type: integer }
+        type: { type: string }
+        latitude: { type: number }
+        longitude: { type: number }
+        status: { type: string }
+        severity: { type: string }
+        source: { type: string }
+        initial_confidence: { type: number }
+        current_confidence: { type: number }
+        created_at: { type: string }
+        last_verified_at: { type: string }
+        verification_count: { type: integer }
+        description: { type: string }
+        accessibility_impact: { type: string }
+        freshness_label: { type: string }
+        is_demo: { type: boolean }
       required:
+        - id
+        - type
+        - latitude
+        - longitude
         - status
-
+        - severity
+        - source
+        - initial_confidence
+        - current_confidence
+        - created_at
+        - last_verified_at
+        - verification_count
+        - description
+        - accessibility_impact
+        - freshness_label
+        - is_demo
+    ObservationInput:
+      type: object
+      properties:
+        type: { type: string }
+        latitude: { type: number }
+        longitude: { type: number }
+        status: { type: string }
+        severity: { type: string }
+        source: { type: string }
+        initial_confidence: { type: number }
+        description: { type: string }
+        accessibility_impact: { type: string }
+      required: [type, latitude, longitude, status, severity, source, initial_confidence, description, accessibility_impact]
+    Report:
+      type: object
+      properties:
+        id: { type: integer }
+        report_type: { type: string }
+        latitude: { type: number }
+        longitude: { type: number }
+        severity: { type: string }
+        description: { type: string }
+        created_at: { type: string }
+        status: { type: string }
+        is_demo: { type: boolean }
+      required: [id, report_type, latitude, longitude, severity, description, created_at, status, is_demo]
+    ReportInput:
+      type: object
+      properties:
+        report_type: { type: string }
+        latitude: { type: number }
+        longitude: { type: number }
+        severity: { type: string }
+        description: { type: string }
+      required: [report_type, latitude, longitude, severity, description]
+    MapPath:
+      type: object
+      properties:
+        id: { type: string }
+        status: { type: string }
+        confidence: { type: number }
+        coordinates:
+          type: array
+          items:
+            type: array
+            items: { type: number }
+            minItems: 2
+            maxItems: 2
+      required: [id, status, confidence, coordinates]
+    MapData:
+      type: object
+      properties:
+        center:
+          type: array
+          items: { type: number }
+        zoom: { type: integer }
+        observations:
+          type: array
+          items:
+            $ref: "#/components/schemas/Observation"
+        paths:
+          type: array
+          items:
+            $ref: "#/components/schemas/MapPath"
+      required: [center, zoom, observations, paths]
+    DashboardStats:
+      type: object
+      properties:
+        accessibility_observations: { type: integer }
+        active_obstacles: { type: integer }
+        verified_accessible_paths: { type: integer }
+        average_confidence: { type: number }
+        recently_changed_locations: { type: integer }
+        last_updated: { type: string }
+      required: [accessibility_observations, active_obstacles, verified_accessible_paths, average_confidence, recently_changed_locations, last_updated]
+    AnalyticsPoint:
+      type: object
+      properties:
+        label: { type: string }
+        value: { type: number }
+      required: [label, value]
+    Analytics:
+      type: object
+      properties:
+        observations_over_time:
+          type: array
+          items:
+            $ref: "#/components/schemas/AnalyticsPoint"
+        obstacles_over_time:
+          type: array
+          items:
+            $ref: "#/components/schemas/AnalyticsPoint"
+        confidence_over_time:
+          type: array
+          items:
+            $ref: "#/components/schemas/AnalyticsPoint"
+        reports_by_category:
+          type: array
+          items:
+            $ref: "#/components/schemas/AnalyticsPoint"
+        status_distribution:
+          type: array
+          items:
+            $ref: "#/components/schemas/AnalyticsPoint"
+      required: [observations_over_time, obstacles_over_time, confidence_over_time, reports_by_category, status_distribution]
+    RouteRequest:
+      type: object
+      properties:
+        start: { type: string }
+        destination: { type: string }
+        mobility_requirement: { type: string }
+        preference: { type: string }
+      required: [start, destination, mobility_requirement, preference]
+    RouteAlternative:
+      type: object
+      properties:
+        id: { type: string }
+        name: { type: string }
+        distance_km: { type: number }
+        duration_minutes: { type: integer }
+        accessibility_score: { type: number }
+        confidence: { type: number }
+        status: { type: string }
+        reason: { type: string }
+        coordinates:
+          type: array
+          items:
+            type: array
+            items: { type: number }
+            minItems: 2
+            maxItems: 2
+      required: [id, name, distance_km, duration_minutes, accessibility_score, confidence, status, reason, coordinates]
+    RouteResult:
+      type: object
+      properties:
+        recommended_route_id: { type: string }
+        alternatives:
+          type: array
+          items:
+            $ref: "#/components/schemas/RouteAlternative"
+        explanation: { type: string }
+      required: [recommended_route_id, alternatives, explanation]
+    DemoResult:
+      type: object
+      properties:
+        stage: { type: string }
+        timeline:
+          type: array
+          items:
+            type: string
+        changed_observation:
+          $ref: "#/components/schemas/Observation"
+        route_result:
+          $ref: "#/components/schemas/RouteResult"
+        message: { type: string }
+      required: [stage, timeline, changed_observation, route_result, message]
+    VisionInput:
+      type: object
+      properties:
+        file_name: { type: string }
+        image_hint: { type: string }
+      required: [file_name]
+    VisionDetection:
+      type: object
+      properties:
+        object: { type: string }
+        confidence: { type: number }
+        impact: { type: string }
+        note: { type: string }
+      required: [object, confidence, impact, note]
+    VisionResult:
+      type: object
+      properties:
+        mode: { type: string }
+        detections:
+          type: array
+          items:
+            $ref: "#/components/schemas/VisionDetection"
+        message: { type: string }
+      required: [mode, detections, message]

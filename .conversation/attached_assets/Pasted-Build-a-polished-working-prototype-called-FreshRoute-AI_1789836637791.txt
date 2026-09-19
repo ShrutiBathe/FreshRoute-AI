@@ -1,0 +1,824 @@
+Build a polished working prototype called:
+
+FreshRoute AI
+Real-Time Accessibility Intelligence & Dynamic Routing
+
+This is an international hackathon prototype. The goal is NOT to build a production-scale system. Build a convincing, functional MVP that clearly demonstrates the project's core innovation:
+
+Detect → Verify → Decay → Update → Reroute
+
+==================================================
+1. PRODUCT CONCEPT
+==================================================
+
+FreshRoute AI is an AI-powered accessibility intelligence and navigation platform.
+
+The system detects accessibility features and temporary obstacles from images/video and user reports, maps them geographically, assigns confidence and freshness scores, detects changes over time, and dynamically recommends accessibility-aware routes.
+
+The key difference from a static accessibility map is:
+
+"Is this path accessible RIGHT NOW, how reliable is that information, and what is the best accessible alternative?"
+
+The prototype must demonstrate this concept visually and interactively.
+
+==================================================
+2. IMPORTANT PROTOTYPE RULE
+==================================================
+
+Do NOT pretend that we have a fully trained computer vision model or live city-wide infrastructure data.
+
+Use:
+- curated sample images
+- simulated camera/dashcam observations
+- realistic mock accessibility observations
+- deterministic demo data
+
+The UI should clearly label simulated/demo data where appropriate.
+
+However, structure the code so a real computer vision model can be plugged in later.
+
+Do NOT fabricate real-world accessibility claims.
+
+==================================================
+3. TECH STACK
+==================================================
+
+Frontend:
+- React
+- TypeScript
+- Vite
+- Tailwind CSS
+- Leaflet + React-Leaflet
+- OpenStreetMap tiles
+- Lucide React icons
+- Recharts for analytics
+
+Backend:
+- Python
+- FastAPI
+- Pydantic
+- REST API
+
+Database:
+- SQLite for the prototype
+- SQLAlchemy ORM
+
+Do not require paid APIs.
+
+Use environment variables for configurable services.
+
+The application must run easily inside Replit.
+
+==================================================
+4. APPLICATION STRUCTURE
+==================================================
+
+Create:
+
+/frontend
+  /src
+    /components
+    /pages
+    /services
+    /data
+    /types
+    /utils
+
+/backend
+  /app
+    /main.py
+    /models
+    /schemas
+    /services
+    /routers
+    /database.py
+
+Also include:
+
+README.md
+.env.example
+
+Create a clean API layer between frontend and backend.
+
+==================================================
+5. MAIN DASHBOARD
+==================================================
+
+Create a professional dashboard called:
+
+"FreshRoute Accessibility Intelligence"
+
+Use a modern accessibility/smart-city visual style.
+
+Do NOT make it look like a generic admin dashboard.
+
+Top navigation:
+
+- Dashboard
+- Live Map
+- Route Planner
+- Reports
+- Analytics
+
+Header:
+FreshRoute AI
+"Real-Time Accessibility Intelligence"
+
+Show a small status:
+
+● Near-real-time monitoring
+
+==================================================
+6. DASHBOARD METRICS
+==================================================
+
+Display cards:
+
+1. Accessibility Observations
+Example: 248
+
+2. Active Obstacles
+Example: 17
+
+3. Verified Accessible Paths
+Example: 136
+
+4. Average Confidence
+Example: 87%
+
+5. Recently Changed Locations
+Example: 12
+
+Make these values come from the backend API, not hardcoded directly inside UI components.
+
+==================================================
+7. LIVE ACCESSIBILITY MAP
+==================================================
+
+This is the most important part of the prototype.
+
+Use Leaflet + OpenStreetMap.
+
+Display:
+
+- accessible paths
+- inaccessible paths
+- uncertain paths
+- ramps
+- stairs
+- elevators
+- blocked sidewalks
+- construction barriers
+- flooded paths
+- reports
+
+Use different visual markers/icons.
+
+Clicking a map observation should open a detail panel.
+
+Example:
+
+OBSERVATION
+Construction Barrier
+
+Status:
+Blocked
+
+Confidence:
+87%
+
+Freshness:
+18 minutes ago
+
+Source:
+Camera Observation
+
+Last verified:
+18 minutes ago
+
+Accessibility impact:
+HIGH
+
+Detected at:
+[location]
+
+==================================================
+8. CONFIDENCE + FRESHNESS SYSTEM
+==================================================
+
+Implement a real backend calculation.
+
+Each observation should contain:
+
+id
+type
+latitude
+longitude
+status
+source
+initial_confidence
+current_confidence
+created_at
+last_verified_at
+verification_count
+severity
+accessibility_impact
+
+Implement temporal confidence decay.
+
+For the prototype use:
+
+confidence(t) =
+initial_confidence * exp(-decay_rate * hours_since_verification)
+
+Set a configurable decay rate.
+
+Example demo:
+
+Initial confidence:
+0.90
+
+After 72 hours without confirmation:
+approximately 0.41
+
+IMPORTANT:
+These are illustrative prototype values, not measured scientific results.
+
+Display:
+
+Confidence: 41%
+
+Freshness:
+72 hours ago
+
+Status:
+Needs verification
+
+==================================================
+9. CHANGE DETECTION
+==================================================
+
+Implement a simulated change detection system.
+
+Example:
+
+Yesterday:
+Sidewalk = Accessible
+Confidence = 92%
+
+New observation:
+Construction barrier detected
+
+System automatically changes:
+
+Today:
+Sidewalk = Temporarily Blocked
+Confidence = 87%
+
+Then update the accessibility graph.
+
+Create a visual timeline:
+
+Yesterday
+   ↓
+New Observation
+   ↓
+Change Detected
+   ↓
+Route Updated
+
+This is one of the key innovation demonstrations.
+
+==================================================
+10. ROUTE PLANNER
+==================================================
+
+Create a route planner page.
+
+Inputs:
+
+Start location
+Destination
+Mobility requirement
+
+Mobility options:
+
+- Wheelchair
+- Mobility impaired
+- Elderly
+- Stroller
+- General pedestrian
+
+Route preferences:
+
+- Fastest
+- Most accessible
+- Highest confidence
+- Balanced
+
+When the user clicks:
+
+"Find Accessible Route"
+
+show multiple route alternatives.
+
+Example:
+
+Route A
+Distance: 1.2 km
+Time: 14 min
+Accessibility: 58%
+Confidence: 62%
+Status: Uncertain
+
+Route B
+Distance: 1.5 km
+Time: 18 min
+Accessibility: 94%
+Confidence: 91%
+Status: Verified Accessible
+
+Recommended:
+Route B
+
+Reason:
+"Route A contains a recently reported construction barrier. Route B is slightly longer but has higher accessibility confidence."
+
+==================================================
+11. ROUTING LOGIC
+==================================================
+
+Do not simply calculate the shortest path.
+
+Create a scoring function using:
+
+distance
+accessibility score
+obstacle severity
+confidence
+freshness
+
+Example conceptual scoring:
+
+route_score =
+accessibility_weight * accessibility_score
++
+confidence_weight * confidence
+-
+distance_weight * normalized_distance
+-
+obstacle_penalty
+
+Allow different weights depending on user preference.
+
+For wheelchair users:
+
+Accessibility weight should be high.
+
+For general users:
+
+Distance weight can be higher.
+
+Make the routing algorithm modular so it can later be replaced with OSRM/GraphHopper or another routing engine.
+
+==================================================
+12. DEMO SCENARIO
+==================================================
+
+Create a prominent:
+
+"Run Demo Scenario"
+
+button.
+
+When clicked:
+
+1. Load a predefined route.
+2. Show an accessible sidewalk.
+3. Display confidence = 92%.
+4. Simulate a new camera observation.
+5. Detect construction barrier.
+6. Change sidewalk status to blocked.
+7. Reduce accessibility confidence.
+8. Recalculate routes.
+9. Show that the previous route is no longer preferred.
+10. Recommend an alternative route.
+
+Animate the change if practical.
+
+This must be extremely easy to demonstrate to judges.
+
+==================================================
+13. COMPUTER VISION DEMO
+==================================================
+
+Create an "AI Detection" page.
+
+Allow the user to upload an image.
+
+For the prototype, use a deterministic/mock inference system if an actual model is unavailable.
+
+Display detected objects such as:
+
+- Ramp
+- Stairs
+- Sidewalk
+- Construction Barrier
+- Parked Vehicle
+- Pothole
+- Flooded Path
+- Accessible Entrance
+
+For each detection display:
+
+Object
+Confidence
+Accessibility impact
+
+Example:
+
+Construction Barrier
+Confidence: 94%
+Impact: HIGH
+
+Ramp
+Confidence: 89%
+Impact: POSITIVE
+
+IMPORTANT:
+Do not claim these detections come from a trained production model.
+
+Label:
+
+"Prototype AI inference"
+
+Create a clean service abstraction:
+
+vision_service.py
+
+so a real YOLO/RT-DETR model can be integrated later.
+
+==================================================
+14. CROWDSOURCED REPORTS
+==================================================
+
+Create a report form.
+
+Fields:
+
+Report type:
+- Blocked sidewalk
+- Broken ramp
+- Elevator unavailable
+- Construction
+- Flooding
+- Accessible entrance
+- Other
+
+Location:
+latitude / longitude
+
+Description
+
+Severity:
+Low
+Medium
+High
+
+Submit Report
+
+After submission:
+
+- store it in SQLite
+- update the map
+- calculate confidence
+- show it in Recent Reports
+- make it available to routing
+
+==================================================
+15. OBSERVATION DETAILS
+==================================================
+
+When clicking an observation show:
+
+--------------------------------
+Accessibility Observation
+--------------------------------
+
+Type:
+Construction Barrier
+
+Status:
+Temporary Block
+
+Severity:
+High
+
+Confidence:
+87%
+
+Freshness:
+18 minutes ago
+
+Source:
+Camera
+
+Verification:
+2 observations
+
+Last verified:
+Today, 18 minutes ago
+
+Accessibility impact:
+HIGH
+
+[View on Map]
+
+[Report Update]
+
+--------------------------------
+
+==================================================
+16. ANALYTICS PAGE
+==================================================
+
+Create charts for:
+
+- Accessibility observations over time
+- Obstacles detected
+- Average confidence
+- Reports by category
+- Accessibility status distribution
+- Recently changed locations
+
+Use Recharts.
+
+==================================================
+17. DATA MODEL
+==================================================
+
+Create backend models:
+
+Observation
+Report
+Route
+Location
+AccessibilityFeature
+
+Observation fields:
+
+id
+type
+latitude
+longitude
+status
+severity
+source
+initial_confidence
+current_confidence
+created_at
+last_verified_at
+verification_count
+description
+
+Report fields:
+
+id
+report_type
+latitude
+longitude
+severity
+description
+created_at
+status
+
+==================================================
+18. API ENDPOINTS
+==================================================
+
+Create FastAPI endpoints:
+
+GET /api/observations
+POST /api/observations
+GET /api/observations/{id}
+
+GET /api/reports
+POST /api/reports
+
+GET /api/map
+
+GET /api/dashboard/stats
+
+GET /api/analytics
+
+POST /api/route
+
+POST /api/demo/run
+
+POST /api/vision/analyze
+
+GET /api/health
+
+Use Pydantic validation.
+
+Return clean JSON.
+
+==================================================
+19. DEMO DATA
+==================================================
+
+Seed the database with realistic demo observations around one fictional/demo city area or campus.
+
+Do NOT present fictional data as real-world measurements.
+
+Use labels such as:
+
+"Demo Observation"
+
+Include:
+
+- ramps
+- stairs
+- elevators
+- blocked sidewalks
+- construction
+- parked vehicles
+- flooded paths
+- accessible entrances
+
+Create enough data for the map to look meaningful.
+
+==================================================
+20. UI/UX REQUIREMENTS
+==================================================
+
+Professional hackathon-quality UI.
+
+Use:
+
+- responsive design
+- clean typography
+- cards
+- map-first dashboard
+- accessible contrast
+- clear status badges
+- tooltips
+- loading states
+- error states
+- empty states
+- mobile responsive layout
+
+Use colors carefully:
+
+Accessible green:
+verified/accessible
+
+Amber:
+uncertain/needs verification
+
+Red:
+blocked/high severity
+
+Blue:
+information
+
+Avoid excessive gradients or flashy effects.
+
+The interface should look like a serious smart-city product.
+
+==================================================
+21. LANDING / INTRO SECTION
+==================================================
+
+Add a compact introduction:
+
+FreshRoute AI
+
+"Know the Path.
+Know What's Changed."
+
+Subtitle:
+
+"Real-time accessibility intelligence and dynamic routing for inclusive mobility."
+
+Three feature cards:
+
+1. Detect
+AI identifies accessibility features and obstacles.
+
+2. Verify
+Freshness and confidence determine how reliable information is.
+
+3. Reroute
+Routes dynamically adapt when accessibility conditions change.
+
+==================================================
+22. PRIVACY AND SAFETY
+==================================================
+
+Do not store personally identifiable information in demo data.
+
+Do not use facial recognition.
+
+Do not identify individuals from images.
+
+Treat camera footage as environmental information only.
+
+Add a simple note:
+
+"Accessibility information is probabilistic and may change. Users should verify conditions where necessary."
+
+==================================================
+23. IMPORTANT ENGINEERING REQUIREMENTS
+==================================================
+
+Do not create fake buttons that do nothing.
+
+Every major button must perform a visible action.
+
+Do not hardcode dashboard values directly into React components.
+
+Use backend APIs.
+
+Handle API errors gracefully.
+
+Keep components modular.
+
+Add comments explaining:
+
+- confidence decay
+- route scoring
+- change detection
+- mock vision inference
+
+Create a README explaining:
+
+1. What FreshRoute AI is
+2. Architecture
+3. How to run it
+4. Demo scenario
+5. API endpoints
+6. How mock AI works
+7. How a real computer vision model could replace it
+8. Future improvements
+
+==================================================
+24. FINAL DEMO FLOW
+==================================================
+
+The finished prototype must support this exact 3-minute hackathon demo:
+
+1. Open Dashboard.
+2. Show accessibility statistics.
+3. Open Live Map.
+4. Click an accessible sidewalk.
+5. Show confidence and freshness.
+6. Run Demo Scenario.
+7. Construction barrier appears.
+8. Accessibility status changes.
+9. Confidence/freshness updates.
+10. Route is recalculated.
+11. Previously preferred route becomes less suitable.
+12. Alternative accessible route is recommended.
+13. Open AI Detection.
+14. Upload a sample image.
+15. Show detected accessibility objects.
+16. Open Reports.
+17. Submit a new accessibility report.
+18. Show it appearing on the map.
+19. Finish with:
+
+"FreshRoute AI doesn't just ask whether a place is accessible.
+It asks whether the path is accessible NOW,
+how reliable that information is,
+and what the best accessible alternative is."
+
+==================================================
+25. QUALITY BAR
+==================================================
+
+Prioritize a working prototype over excessive features.
+
+The prototype must actually run.
+
+Before finishing:
+- install dependencies
+- start frontend
+- start backend
+- test all API endpoints
+- test map
+- test report submission
+- test confidence decay
+- test demo scenario
+- test route generation
+- fix console errors
+- fix API errors
+- make sure the UI is responsive
+
+Do not stop after generating the code.
+
+Run and verify the application.
+
+If there is a choice between adding another feature and fixing an existing broken feature, FIX THE BROKEN FEATURE.
+
+Build the complete working prototype now.
