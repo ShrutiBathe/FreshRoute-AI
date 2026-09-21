@@ -49,20 +49,6 @@ The system collects accessibility observations and evaluates them using:
 
 These signals are used to create a **dynamic accessibility graph** that can support accessible route planning.
 
-### Core workflow
-
-```text
-Capture
-   ↓
-AI Detection
-   ↓
-Geospatial Mapping
-   ↓
-Freshness & Confidence
-   ↓
-Dynamic Accessibility Graph
-   ↓
-Personalized Navigation
 ## 📸 Screenshots
 
 ### Dashboard
@@ -88,3 +74,21 @@ Personalized Navigation
 ### Analytics
 
 ![FreshRoute AI Analytics](docs/screenshots/analytics.png)
+
+### Core workflow
+
+```text
+Capture
+   ↓
+AI Detection
+   ↓
+Geospatial Mapping
+   ↓
+Freshness & Confidence
+   ↓
+Dynamic Accessibility Graph
+   ↓
+Personalized Navigation
+
+
+
