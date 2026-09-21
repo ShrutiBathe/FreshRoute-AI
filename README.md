@@ -63,3 +63,28 @@ Freshness & Confidence
 Dynamic Accessibility Graph
    ↓
 Personalized Navigation
+## 📸 Screenshots
+
+### Dashboard
+
+![FreshRoute AI Dashboard](docs/screenshots/dashboard.png)
+
+### Accessibility Map
+
+![FreshRoute AI Accessibility Map](docs/screenshots/accessibility-map.png)
+
+### Accessibility-Aware Routing
+
+![FreshRoute AI Routing](docs/screenshots/routing.png)
+
+### Accessibility Observations
+
+![FreshRoute AI Observations](docs/screenshots/observations.png)
+
+### Detection
+
+![FreshRoute AI Detection](docs/screenshots/detection.png)
+
+### Analytics
+
+![FreshRoute AI Analytics](docs/screenshots/analytics.png)
