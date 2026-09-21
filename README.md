@@ -48,6 +48,11 @@ The system collects accessibility observations and evaluates them using:
 - Change detection
 
 These signals are used to create a **dynamic accessibility graph** that can support accessible route planning.
+## 🏗️ System Architecture
+
+![FreshRoute AI Architecture](docs/architecture/freshroute-architecture.png)
+
+The FreshRoute AI architecture follows a pipeline from accessibility data collection to AI-assisted detection, freshness and confidence evaluation, geospatial intelligence, dynamic routing, and the user interface.
 
 ## 📸 Screenshots
 
